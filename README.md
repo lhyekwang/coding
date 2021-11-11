@@ -1,5 +1,5 @@
 >
-# Markup Coding
+# Coding
 
 ## Use Languagee
 - HTML, CSS, JS, JQuery
@@ -12,4 +12,7 @@
 
 ## Usage
 - accessibility
+
+## Etc
+- Animation
 
