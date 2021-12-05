@@ -1,0 +1,135 @@
+<template>
+  <TabMenu
+      class="tab_type1"
+      :tabs="tabList"
+      ariaLable = 'contentControl'
+      @selectEvent="selectedEvent"  
+    ></TabMenu>
+</template>
+
+<script>
+import TabMenu from 'TabMenu.vue'
+export default {
+  components:{ TabMenu },
+  data(){
+    return{
+      tabList:[
+        {
+          content : 'tab1'
+        },
+        {
+          content : 'tab2'
+        },
+      ]
+    }
+  },
+  methods : {
+    selectedEvent(idx){      
+      this.$emit('selectEvent', idx)
+    }
+  }
+}
+</script>
+
+---<< tabmenu
+
+<template>
+	<div
+		role="tablist"
+		aria-label="ariaLable"
+		:class="[
+			'tab_wsf',
+			{ tab_type2: TabWsf2 },
+			{ tab_type3: TabWsf3 },
+			{ tab_type4: TabWsf4 },
+		]"
+	>
+		<div class="inner_g">
+			<button
+				v-for="(item, idx) in tabs"
+				:key="idx"
+				role="tab"
+				:class="[
+					'btn_tab',
+					{ selected: selected === idx },
+					{ completed: item.isComplete },
+          { disabled: disabled }
+				]"
+				:id="[`${ariaLable}Tab${idx}`]"
+				:aria-controls="[`${ariaLable}Panel${idx}`]"
+				:aria-selected="selected === idx ? `true` : `false`"
+				:tabindex="selected === idx ? 0 : -1"
+				@click="selectTab(idx)"
+			>
+				<span
+					v-if="item.setting"
+					:class="[
+						'ico_wsf',
+						item.isComplete ? 'ico_check_on' : 'ico_check_off',
+					]"
+				>
+					{{ item.isComplete ? '설정 완료' : '설정 미완료' }}
+				</span>
+				<span class="txt_tab">
+					{{ item.text || item.content }}
+					<template v-if="item.value !== undefined">
+						({{ formatNumber(item.value) }})
+					</template>
+				</span>
+				<span v-if="item.new" class="ico_new1">new</span>
+				<span v-if="item.badge" class="chip_comm">{{ item.badge }}</span>
+			</button>
+		</div>
+	</div>
+</template>
+
+<script>
+import numberUtil from '@/mixins/numberUtil';
+export default {
+	mixins: [numberUtil],
+	data() {
+		return {
+			selected: this.initIdx,
+			newtab: 2,
+			isComplete: false,
+		};
+	},
+	props: {
+		tabs: {
+			type: Array,
+		},
+		initIdx: {
+			type: Number,
+			default: 0,
+		},
+		ariaLable: {
+			type: String,
+		},
+		TabWsf2: {
+			type: Boolean,
+		},
+		TabWsf3: {
+			type: Boolean,
+		},
+		TabWsf4: {
+			type: Boolean,
+    },
+    disabled: {
+      type: Boolean,
+    }
+	},
+	methods: {
+		selectTab(idx) {
+			this.selected = idx;
+			this.$emit('selectEvent', idx);
+		},
+		selectedTabMenu(idx) {
+			this.selected = idx;
+		}
+	},
+};
+</script>
+
+<style lang="scss" scoped>
+@import 'tabmenu';
+</style>
