@@ -1,0 +1,62 @@
+<%- include('content_sub' , {
+            active : 'HOME'
+}) %>  
+
+<<-- content_sub.ejs
+
+<% let objTabList = [
+    {name: 'HOME', id: 'tab1', active : false},
+    {name: 'BEST', id: 'tab2', active : false},
+    {name: 'NEW', id: 'tab3', active : false},
+    {name: 'CATEGORY1', id: 'tab5', active : false, 
+        subCategory :  
+        [
+          {name: 'SUB_CATEGORY1', id: 'cate1', active: true},
+          {name: 'SUB_CATEGORY2', id: 'cate2'},
+          {name: 'SUB_CATEGORY3', id: 'cate3'},
+          {name: 'SUB_CATEGORY4', id: 'cate4'},
+          {name: 'SUB_CATEGORY5', id: 'cate5'},
+          {name: 'SUB_CATEGORY5', id: 'cate6'},
+        ]
+    },
+    {name: 'CATEGORY2', id: 'tab6', active : false},
+] %>
+
+<% objTabList.forEach(function (item) { %>
+  <% if(item.name === active) { %>
+      <%item.active = true %>
+  <% }%>
+<% }) %> 
+
+<%- include('component/menu_customer', {
+        tabList: objTabList,         
+}) %>  
+
+ <<- menu_customer.ejs
+
+<ul class="list_nav <%= listClass%>" role="tablist">
+    <% tabList.forEach(function (item) { %>
+        <% const tabSelected = item.active === true %>
+        <% const tabDisabled = item.disabled === true %>
+        <li role="presentation">
+            <a href="#none" id="<%= item.id%>" class="link_lnb<% if (tabDisabled){ %> disabled<% } %>" role="tab" aria-selected="<%= tabSelected %>"<% if (tabDisabled){ %> tabindex="-1"<% } %>><span class="txt_lnb"><%= item.name %></span></a>
+          </li>
+    <% }) %>
+</ul>
+<% tabList.forEach(function (item) { %>
+    <% const tabSelected = item.active === true %>
+    <%if(item.subCategory){ %>
+        <%- include('component/tab_customer', {
+            tabList: item.subCategory,
+        }) %>
+    <%} %>
+<% }) %>
+
+<<- tab_customer.ejs
+
+<% if(locals.tabTitle) { %><strong class="screen_out"><%= tabTitle %></strong><%}%>
+<div class="list_tab">
+    <% tabList.forEach(function (item) { %>
+        <button class="link_tab" aria-selected="<%= item.active === true %>" ><span class="txt_tab"><%= item.name %></span></button>
+    <% }) %>
+</div>
