@@ -4,7 +4,7 @@ import SearchForm from "./components/SearchForm.js"
 import SearchResult from "./components/SearchResult.js"
 import store from "./Store.js"
 import Tabs , { TabType } from "./components/Tabs.js"
-import KeywordList from "./components/KeywordList.js"
+import KeywordList  from "./components/KeywordList.js"
 import HistorywordList from "./components/HistorywordList.js"
 
 export default class App extends React.Component {

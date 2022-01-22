@@ -1,29 +1,18 @@
 import React from "react" ;
 
-export default class List extends React.Component{
-  constructor(){
-    super();
-
-    this.state = {
-      data : [],
-    }
-  }
-  renderItem( item, index ){
-    throw "구현하세요"
-  }
-
-  render(){
+const List = ( { data =[] , onClick, renderItem } )=>{
     return(
       <ul className="list">
-        {this.state.data.map( (item, index)=>(          
+        {data.map( (item, index)=>(          
           <li 
             key={item.id}
-            onClick = { () => (this.props.onClick (item.keyword) ) }
+            onClick = { () => (onClick (item.keyword) ) }
           >
-            { this.renderItem(item, index) }            
+            { renderItem(item, index) }            
           </li>
         ))}
       </ul>
     )
-  }
 }
+
+export default List;
