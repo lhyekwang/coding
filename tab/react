@@ -1,0 +1,16 @@
+
+const [showMenu, setShowMenu] = useState(false);
+
+const handleClickClose = () => setShowMenu(false);
+
+const toggleMenu = (isHideProfile) => {
+    if (showMenu && hideProfile === isHideProfile) {
+      return setShowMenu(false);
+    }    
+    setShowMenu(true);
+};
+
+<SideMenu          
+          onClose={handleClickClose}
+/>
+

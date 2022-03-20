@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TabAccessibility</title>
+  <style type="text/css">
+  /* reset */
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,textarea,p,blockquote,th,td,input,select,button{margin:0;padding:0}
+fieldset,img{border:0 none}
+dl,ul,ol,menu,li{list-style:none}
+blockquote, q{quotes: none}
+blockquote:before, blockquote:after,q:before, q:after{content:'';content:none}
+input,select,textarea,button{vertical-align:middle}
+input::-ms-clear{display:none}
+button{border:0 none;background-color:transparent;cursor:pointer}
+body{background:#fff}
+body,th,td,input,select,textarea,button{font-size:12px;line-height:1.5;font-family:'돋움',dotum,sans-serif;color:#333} /* color값은 디자인가이드에 맞게사용 */
+a{color:#333;text-decoration:none}
+a:active, a:hover{text-decoration:underline}
+a:active{background-color:transparent}
+address,caption,cite,code,dfn,em,var{font-style:normal;font-weight:normal}
+.example{width:600px;margin:30px auto 0;}
+.list_tab{overflow:hidden;}
+.list_tab li{float:left}
+.list_tab .on button{background-color: lightcoral;}
+.list_tab li + li{margin-left:-1px}
+.list_tab button{float:left;width:100px;height:50px;border:1px solid goldenrod;background-color:#fff}
+.section_cont{height:300px;background-color:lemonchiffon}
+.section_cont[aria-hidden="false"]{display: block;}
+.section_cont[aria-hidden="true"]{display: none;}
+  </style>
+</head>
+<body>
+  <div class="example">
+    <h1>TAB ACCESSIBILITY</h1>
+    <div class="wrap_tabs"> 
+      <h2>탭목록</h2> 
+      <ul id="tabNav" class="list_tab" role="tablist" aria-label = "tab">
+        <li role="presentation" class="on">
+          <button role="tab"  id="tab-id-1" aria-controls="tabpannel-id-1" aria-selected="true" tabindex="0">탭1</button>
+        </li>
+        <li role="presentation">
+          <button role="tab"  id="tab-id-2" aria-controls="tabpannel-id-2" aria-selected="false" tabindex="-1">탭2</button>
+        </li>
+        <li role="presentation">
+          <button role="tab"  id="tab-id-3" aria-controls="tabpannel-id-3" aria-selected="false" tabindex="-1">탭3</button>
+        </li>
+      </ul>
+    </div>      
+    <section role="tabpanel" id="tabpannel-id-1" aria-controls="tab-id-1"  tabindex="0" aria-hidden="false" class="section_cont">
+      <h2>sectionHeader1</h2>
+      <p>sectionCont1</p>
+    </section>
+    <section role="tabpanel" id="tabpannel-id-2" aria-controls="tab-id-2" tabindex="0" aria-hidden="true" class="section_cont">
+      <h2>sectionHeader2</h2>
+      <p>sectionCont2</p>
+    </section>
+    <section role="tabpanel" id="tabpannel-id-3" aria-controls="tab-id-3" tabindex="0" aria-hidden="true" class="section_cont">
+      <h2>sectionHeader3</h2>
+      <p>sectionCont3</p>
+    </section>
+  </div>  
+  <script>
+        // const tabNav = document.querySelector('.list_tab');
+        let tabs = document.querySelectorAll('[role="tab"]');
+        const tabList = document.querySelectorAll('[role="tablist"]');
+        const contNodess = document.querySelectorAll('.wrap_panel');
+        let contPannel = document.querySelectorAll('[role="tabpanel"]');
+        let _selectedIdx = 0;
+        
+        //Tab 클릭이벤트
+        if(tabs.length > 0){
+          tabs.forEach(function (e) {
+            e.addEventListener('click', tabClickEvent);
+          });
+          tabList.forEach(function (e) {
+            e.addEventListener('keydown', eventTabIndex);
+          });          
+        }              
+
+        function tabClickEvent(target) {          
+          const target = e.currentTarget;
+          const parent = target.parentNode;
+          const grandparent = parent.parentNode;   
+          tabs = grandparent.querySelectorAll('[role="tab"]');     
+          console.log(e);
+          console.log(target);
+          
+          tabs.forEach(element => {
+            if(element.parentNode.classList.contains('on')){ // IE대응시 폴리필 추가 필요 ( https://developer.mozilla.org/ko/docs/Web/API/Element/classList)
+              element.parentNode.classList.remove('on');
+              element.setAttribute('aria-selected', 'false');
+              element.setAttribute('tabindex', '-1');
+            }
+            document.getElementById(element.getAttribute('aria-controls')).setAttribute('aria-hidden', true);            
+          })
+
+          document.getElementById(target.getAttribute('aria-controls')).setAttribute('aria-hidden', false);
+          target.parentNode.classList.add('on');
+          target.setAttribute('aria-selected', 'true');                  
+          target.setAttribute('tabindex', '0');   
+          
+          // console.log(Array.prototype.indexOf.call(tabs , target))
+          _selectedIdx = Array.prototype.indexOf.call(tabs , target);     
+          // console.log(_selectedIdx + ": _selectedIdx");         
+
+          
+          
+          
+        }
+
+        function eventTabIndex(e){    
+          switch(e.keyCode){
+            case 39: // 오른쪽 화살표
+              console.log (' right');
+              _selectedIdx++;              
+              break;
+            case 37: // 왼쪽 화살표
+              console.log('left');
+              _selectedIdx--;
+              break;
+          }
+
+          // console.log(tabs[_selectedIdx]);
+          
+          tabClickEvent(tabs[_selectedIdx]);
+          // console.log(tabs + "tabs[_selectedIdx]");
+        }
+        
+  </script>
+</body>
+</html>
