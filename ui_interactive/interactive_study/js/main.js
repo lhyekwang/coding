@@ -1,6 +1,10 @@
 ( ()=>{
   
   let yOffset = 0;
+  
+  let prevScrollHeight =0; 
+  let currentScene = 0;
+
   const sceneInfo = [
     {
       // 0
@@ -50,7 +54,26 @@
   }
 
   function scrollLoop(){
-    console.log(yOffset);
+    prevScrollHeight = 0;
+    for( let i = 0; i < currentScene; i++  ){
+      prevScrollHeight +=  sceneInfo[i].scrollHeight;
+      // prevScrollHeight = sceneInfo[n].scrollHeight;
+      // prevScrollHeight = sceneInfo[n].scrollHeight;
+    // console.log(prevScrollHeight)
+    }    
+
+     if( yOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight){
+       currentScene ++;
+     }
+
+     if(yOffset < prevScrollHeight){
+       if(currentScene === 0) return; // 끌어당길때 -까지 될수 있으니  0이면 종료로 처리
+       currentScene --;
+     }     
+    
+    // console.log(prevScrollHeight)
+    console.log(currentScene)    
+
   }
 
   window.addEventListener('resize' , setLayout);
