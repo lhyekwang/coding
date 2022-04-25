@@ -79,6 +79,7 @@ body.before-load {
 .scroll-section {
 	position: relative;
 	padding-top: 50vh;
+	box-sizing: border-box;
 }
 #scroll-section-0 h1 {
 	position: relative;
