@@ -26,5 +26,6 @@ npm run start
 ui_interacitve
 https://www.npmjs.com/package/http-server
 ```
-http-server [path] [options]
+http-server interactive_study/
+
 ```
